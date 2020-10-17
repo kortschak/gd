@@ -52,6 +52,10 @@ Each iteration of the loop will be rendered into the Markdown.
 		if err != nil {
 			log.Fatal(err)
 		}
+		err = resp.Body.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
 		fmt.Printf("The image at %s is a %s.\n", url, format)
 ```
 > ```stdout
@@ -66,11 +70,11 @@ Each iteration of the loop will be rendered into the Markdown.
 ```
 		show.Image(img, url, path.Base(url))
 ```
-> ![https://blog.golang.org/gopher/glenda.png](example_57_0.png "glenda.png")
+> ![https://blog.golang.org/gopher/glenda.png](example_61_0.png "glenda.png")
 
-> ![https://blog.golang.org/gopher/gopher.png](example_57_1.png "gopher.png")
+> ![https://blog.golang.org/gopher/gopher.png](example_61_1.png "gopher.png")
 
-> ![https://blog.golang.org/gopher/header.jpg](example_57_2.png "header.jpg")
+> ![https://blog.golang.org/gopher/header.jpg](example_61_2.png "header.jpg")
 ```
 	}
 }
