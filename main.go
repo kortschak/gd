@@ -104,23 +104,39 @@ func main() {
 					}
 				case "image":
 					if *inline {
+						e.Image = strings.TrimPrefix(e.Image, "data:image/svg+xml,")
 						if e.Title == "" {
 							fmt.Printf("![%s](%s)\n", e.Text, e.Image)
 						} else {
 							fmt.Printf("![%s](%s %q)\n", e.Text, e.Image, e.Title)
 						}
 					} else {
-						data := strings.TrimPrefix(e.Image, "data:image/png;base64,")
-						src := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data))
+						var (
+							src    io.Reader
+							format string
+						)
+						switch {
+						case strings.HasPrefix(e.Image, "data:image/png;base64,"):
+							data := strings.TrimPrefix(e.Image, "data:image/png;base64,")
+							src = base64.NewDecoder(base64.StdEncoding, strings.NewReader(data))
+							format = "png"
+						case strings.HasPrefix(e.Image, "data:image/svg+xml,"):
+							data := strings.TrimPrefix(e.Image, "data:image/svg+xml,")
+							src = strings.NewReader(data)
+							format = "svg"
+						default:
+							log.Fatalf("unknown image format: %s", e.Image)
+						}
 						var name string
 						base := filepath.Base(flag.Arg(0))
 						ext := filepath.Ext(base)
 						base = base[:len(base)-len(ext)]
 						if len(r) == 1 {
-							name = fmt.Sprintf("%s_%d.png", base, e.Line)
+							name = fmt.Sprintf("%s_%d.%s", base, e.Line, format)
 						} else {
-							name = fmt.Sprintf("%s_%d_%d.png", base, e.Line, i)
+							name = fmt.Sprintf("%s_%d_%d.%s", base, e.Line, i, format)
 						}
+
 						dst, err := os.Create(name)
 						if err != nil {
 							log.Fatal(err)

@@ -24,3 +24,14 @@ func Image(img image.Image, text, title string) error {
 	}
 	return enc.Encode(e)
 }
+
+// SVG renders the given SVG image, title and alt text into the event stream.
+func SVG(img, text, title string) error {
+	e := enc.Event{
+		Stream: "image",
+		Text:   text,
+		Image:  "data:image/svg+xml," + img,
+		Title:  title,
+	}
+	return enc.Encode(e)
+}
