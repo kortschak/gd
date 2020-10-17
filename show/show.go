@@ -9,8 +9,8 @@ import (
 	"github.com/kortschak/gd/internal/enc"
 )
 
-// Image renders the given image and alt text into the event stream.
-func Image(img image.Image, text string) error {
+// Image renders the given image, title and alt text into the event stream.
+func Image(img image.Image, text, title string) error {
 	var buf bytes.Buffer
 	err := png.Encode(&buf, img)
 	if err != nil {
@@ -20,6 +20,7 @@ func Image(img image.Image, text string) error {
 		Stream: "image",
 		Text:   text,
 		Image:  "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes()),
+		Title:  title,
 	}
 	return enc.Encode(e)
 }

@@ -30,4 +30,5 @@ type Event struct {
 	Line   int    `json:"line"`
 	Text   string `json:"text"`
 	Image  string `json:"image,omitempty"`
+	Title  string `json:"title,omitempty"`
 }

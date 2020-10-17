@@ -125,7 +125,11 @@ func main() {
 						if *quote {
 							fmt.Print("> ")
 						}
-						fmt.Printf("![%s](%s)\n", e.Text, name)
+						if e.Title == "" {
+							fmt.Printf("![%s](%s)\n", e.Text, name)
+						} else {
+							fmt.Printf("![%s](%s %q)\n", e.Text, name, e.Title)
+						}
 						if len(r) != 1 && i != len(r)-1 {
 							fmt.Println()
 						}

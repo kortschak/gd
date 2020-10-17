@@ -17,6 +17,7 @@ import (
 	"image"
 	"log"
 	"net/http"
+	"path"
 
 	/*{md}
 	The "show" package is a magic package that is resolved by the
@@ -53,6 +54,6 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Printf("The image at %s is a %s.\n", url, format)
-		show.Image(img, url)
+		show.Image(img, url, path.Base((url)))
 	}
 }
