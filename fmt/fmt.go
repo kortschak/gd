@@ -129,6 +129,18 @@ func Sscanln(str string, a ...interface{}) (n int, err error) {
 	return fmt.Sscanln(str, a...)
 }
 
+type Formatter = fmt.Formatter
+
+type GoStringer = fmt.GoStringer
+
+type ScanState = fmt.ScanState
+
+type Scanner = fmt.Scanner
+
+type State = fmt.State
+
+type Stringer = fmt.Stringer
+
 func dst(w io.Writer) string {
 	switch w {
 	case os.Stdout:
