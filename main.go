@@ -101,7 +101,11 @@ func main() {
 					}
 				case "image":
 					if *inline {
-						fmt.Printf("![%s](%s)\n", e.Text, e.Image)
+						if e.Title == "" {
+							fmt.Printf("![%s](%s)\n", e.Text, e.Image)
+						} else {
+							fmt.Printf("![%s](%s %q)\n", e.Text, e.Image, e.Title)
+						}
 					} else {
 						data := strings.TrimPrefix(e.Image, "data:image/png;base64,")
 						src := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data))
