@@ -40,4 +40,4 @@ func main() {
 }
 ```
 
-`gd` can also [include graphic output](images) in the Markdown document.
+`gd` can also [include graphic output](examples/images) in the Markdown document.
