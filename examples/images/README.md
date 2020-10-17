@@ -64,7 +64,7 @@ Each iteration of the loop will be rendered into the Markdown.
 > The image at https://blog.golang.org/gopher/header.jpg is a jpeg.
 > ```
 ```
-		show.Image(img, url, path.Base((url)))
+		show.Image(img, url, path.Base(url))
 ```
 > ![https://blog.golang.org/gopher/glenda.png](example_57_0.png "glenda.png")
 

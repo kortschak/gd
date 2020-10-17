@@ -54,6 +54,6 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Printf("The image at %s is a %s.\n", url, format)
-		show.Image(img, url, path.Base((url)))
+		show.Image(img, url, path.Base(url))
 	}
 }
