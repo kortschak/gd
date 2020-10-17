@@ -42,6 +42,9 @@ func main() {
 		os.Exit(2)
 	}
 	src, err := ioutil.ReadFile(flag.Arg(0))
+	if err != nil {
+		log.Fatal(err)
+	}
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, "src.go", src, parser.ParseComments)
 	if err != nil {
