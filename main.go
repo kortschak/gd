@@ -103,6 +103,9 @@ func main() {
 		if ok {
 			fmt.Println(ticks)
 			for i, e := range r {
+				if e.File != flag.Arg(0) {
+					log.Fatalf("called event generator in dependency file: %s", e.File)
+				}
 				switch e.Stream {
 				case "stdout", "stderr":
 					if !strings.HasSuffix(e.Text, "\n") {

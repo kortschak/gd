@@ -20,13 +20,15 @@ func init() {
 func Encode(e Event) error {
 	mu.Lock()
 	defer mu.Unlock()
-	_, _, line, _ := runtime.Caller(2)
+	_, file, line, _ := runtime.Caller(2)
+	e.File = file
 	e.Line = line
 	return enc.Encode(e)
 }
 
 type Event struct {
 	Stream string `json:"stream"`
+	File   string `json:"file"`
 	Line   int    `json:"line"`
 	Text   string `json:"text"`
 	Image  string `json:"image,omitempty"`
