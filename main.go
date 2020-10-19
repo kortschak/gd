@@ -113,6 +113,8 @@ func main() {
 					} else {
 						fmt.Printf("%s%s\n%s%s\n", ticks, e.Stream, e.Text, ticks)
 					}
+				case "markdown":
+					fmt.Print(e.Text)
 				case "image":
 					if *inline {
 						e.Image = strings.TrimPrefix(e.Image, "data:image/svg+xml,")

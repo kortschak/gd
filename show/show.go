@@ -10,6 +10,15 @@ import (
 	"github.com/kortschak/gd/internal/enc"
 )
 
+// Markdown renders the Markdown text into the event stream.
+func Markdown(text string) error {
+	e := enc.Event{
+		Stream: "markdown",
+		Text:   text,
+	}
+	return enc.Encode(e)
+}
+
 // JPEG renders the given image, title and alt text into the event stream as a JPEG.
 func JPEG(img image.Image, o *jpeg.Options, text, title string) error {
 	var buf bytes.Buffer
