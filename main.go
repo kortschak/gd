@@ -46,7 +46,7 @@ func main() {
 		log.Fatal(err)
 	}
 	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, "src.go", src, parser.ParseComments)
+	f, err := parser.ParseFile(fset, flag.Arg(0), src, parser.ParseComments)
 	if err != nil {
 		log.Fatal(err)
 	}
