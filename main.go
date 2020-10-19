@@ -117,9 +117,9 @@ func main() {
 					if *inline {
 						e.Image = strings.TrimPrefix(e.Image, "data:image/svg+xml,")
 						if e.Title == "" {
-							fmt.Printf("![%s](%s)\n", e.Text, e.Image)
+							fmt.Printf("![%s](%s)\n\n", e.Text, e.Image)
 						} else {
-							fmt.Printf("![%s](%s %q)\n", e.Text, e.Image, e.Title)
+							fmt.Printf("![%s](%s %q)\n\n", e.Text, e.Image, e.Title)
 						}
 					} else {
 						var (
