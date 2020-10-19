@@ -27,7 +27,7 @@ import (
 	"show"
 
 	/*{md}
-	Although both jpeg and png images are being handled by this
+	Although both jpeg and png input images are being handled by this
 	example, all images are finally rendered as png.
 	*/
 	_ "image/jpeg"
@@ -58,6 +58,6 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Printf("The image at %s is a %s.\n", url, format)
-		show.Image(img, url, path.Base(url))
+		show.PNG(img, url, path.Base(url))
 	}
 }

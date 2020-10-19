@@ -26,7 +26,7 @@ be "github.com/kortschak/gd/show".
 	"show"
 
 ```
-Although both jpeg and png images are being handled by this
+Although both jpeg and png input images are being handled by this
 example, all images are finally rendered as png.
 ```
 	_ "image/jpeg"
@@ -68,7 +68,7 @@ Each iteration of the loop will be rendered into the Markdown.
 > The image at https://blog.golang.org/gopher/header.jpg is a jpeg.
 > ```
 ```
-		show.Image(img, url, path.Base(url))
+		show.PNG(img, url, path.Base(url))
 ```
 > ![https://blog.golang.org/gopher/glenda.png](example_61_0.png "glenda.png")
 

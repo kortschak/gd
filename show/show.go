@@ -4,13 +4,30 @@ import (
 	"bytes"
 	"encoding/base64"
 	"image"
+	"image/jpeg"
 	"image/png"
 
 	"github.com/kortschak/gd/internal/enc"
 )
 
-// Image renders the given image, title and alt text into the event stream.
-func Image(img image.Image, text, title string) error {
+// JPEG renders the given image, title and alt text into the event stream as a JPEG.
+func JPEG(img image.Image, o *jpeg.Options, text, title string) error {
+	var buf bytes.Buffer
+	err := jpeg.Encode(&buf, img, o)
+	if err != nil {
+		return err
+	}
+	e := enc.Event{
+		Stream: "image",
+		Text:   text,
+		Image:  "data:image/jpeg;base64," + base64.StdEncoding.EncodeToString(buf.Bytes()),
+		Title:  title,
+	}
+	return enc.Encode(e)
+}
+
+// PNG renders the given image, title and alt text into the event stream as a PNG.
+func PNG(img image.Image, text, title string) error {
 	var buf bytes.Buffer
 	err := png.Encode(&buf, img)
 	if err != nil {

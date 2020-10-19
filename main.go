@@ -127,6 +127,10 @@ func main() {
 							format string
 						)
 						switch {
+						case strings.HasPrefix(e.Image, "data:image/jpeg;base64,"):
+							data := strings.TrimPrefix(e.Image, "data:image/jpeg;base64,")
+							src = base64.NewDecoder(base64.StdEncoding, strings.NewReader(data))
+							format = "jpeg"
 						case strings.HasPrefix(e.Image, "data:image/png;base64,"):
 							data := strings.TrimPrefix(e.Image, "data:image/png;base64,")
 							src = base64.NewDecoder(base64.StdEncoding, strings.NewReader(data))
