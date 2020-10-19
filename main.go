@@ -83,6 +83,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+	longTicks := longestTicks(string(src))
+	for _, grp := range events {
+		for _, e := range grp {
+			n := longestTicks(e.Text)
+			if n > longTicks {
+				longTicks = n
+			}
+		}
+	}
+	ticks := strings.Repeat("`", max(longTicks+1, 3))
+
 	rep := strings.NewReplacer("\n", "\n> ")
 	sc := bufio.NewScanner(bytes.NewReader(src))
 	var line int
@@ -90,7 +101,7 @@ func main() {
 	for sc.Scan() {
 		r, ok := events[line]
 		if ok {
-			fmt.Println("```")
+			fmt.Println(ticks)
 			for i, e := range r {
 				switch e.Stream {
 				case "stdout", "stderr":
@@ -98,9 +109,9 @@ func main() {
 						e.Text += "\n"
 					}
 					if *quote {
-						fmt.Printf("> ```%s\n> %s```\n", e.Stream, rep.Replace(e.Text))
+						fmt.Printf("> %s%s\n> %s%s\n", ticks, e.Stream, rep.Replace(e.Text), ticks)
 					} else {
-						fmt.Printf("```%s\n%s```\n", e.Stream, e.Text)
+						fmt.Printf("%s%s\n%s%s\n", ticks, e.Stream, e.Text, ticks)
 					}
 				case "image":
 					if *inline {
@@ -159,13 +170,13 @@ func main() {
 					}
 				}
 			}
-			fmt.Println("```")
+			fmt.Println(ticks)
 		}
 		line++
 		c, ok := mdText[line]
 		if !ok {
 			if wasComment {
-				fmt.Println("```")
+				fmt.Println(ticks)
 			}
 			wasComment = false
 			fmt.Println(sc.Text())
@@ -173,13 +184,13 @@ func main() {
 			text := strings.TrimPrefix(c.Text, "/*{md}")
 			text = strings.TrimSuffix(text, "*/")
 			if !wasComment {
-				fmt.Print("```")
+				fmt.Print(ticks)
 			} else {
 				text = strings.TrimPrefix(text, "\n")
 			}
 			indent := fset.Position(c.Pos()).Column - 1
 			text = strings.Replace(text, "\n"+strings.Repeat("\t", indent), "\n", -1)
-			fmt.Printf("%s```\n", text)
+			fmt.Printf("%s%s\n", text, ticks)
 			n := fset.Position(c.End()).Line - line
 			err = skip(n, sc)
 			if err != nil {
@@ -190,8 +201,23 @@ func main() {
 		}
 	}
 	if !wasComment {
-		fmt.Println("```")
+		fmt.Println(ticks)
 	}
+}
+
+func longestTicks(s string) int {
+	var m, l int
+	for _, r := range s {
+		if r != '`' {
+			if l > m {
+				m = l
+			}
+			l = 0
+			continue
+		}
+		l++
+	}
+	return m
 }
 
 func skip(n int, sc *bufio.Scanner) error {
@@ -204,6 +230,13 @@ func skip(n int, sc *bufio.Scanner) error {
 		return io.ErrUnexpectedEOF
 	}
 	return nil
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 // run runs the source described by fset and f and collects output events.
