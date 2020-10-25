@@ -38,7 +38,7 @@ func main() {
 	}
 	flag.Parse()
 
-	if len(flag.Args()) != 1 {
+	if len(flag.Args()) < 1 {
 		flag.Usage()
 		os.Exit(2)
 	}
@@ -79,7 +79,7 @@ func main() {
 		}
 	}
 
-	events, err := run(fset, f)
+	events, err := run(fset, f, flag.Args()[1:])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -254,7 +254,7 @@ func max(a, b int) int {
 }
 
 // run runs the source described by fset and f and collects output events.
-func run(fset *token.FileSet, f *ast.File) (map[int][]enc.Event, error) {
+func run(fset *token.FileSet, f *ast.File, args []string) (map[int][]enc.Event, error) {
 	// Retain line numbering to be consistent with the
 	// source as given.
 	cfg := printer.Config{
@@ -279,7 +279,8 @@ func run(fset *token.FileSet, f *ast.File) (map[int][]enc.Event, error) {
 		return nil, err
 	}
 
-	gorun := exec.Command("go", "run", tmp.Name())
+	args = append([]string{"run", tmp.Name()}, args...)
+	gorun := exec.Command("go", args...)
 	var buf bytes.Buffer
 	gorun.Stdout = &buf
 	gorun.Stderr = os.Stderr
