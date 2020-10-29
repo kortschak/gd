@@ -300,7 +300,8 @@ func run(fset *token.FileSet, f *ast.File, args []string) (map[int][]enc.Event, 
 		if err != nil {
 			return nil, err
 		}
-		events[e.Line] = append(events[e.Line], e)
+		line := lastLineOf(e.Func, e.Line, fset, f)
+		events[line] = append(events[line], e)
 	}
 	return events, nil
 }
@@ -317,4 +318,37 @@ func formatCLargs(args []string) string {
 		fmt.Fprint(&buf, s)
 	}
 	return buf.String()
+}
+
+// lastLineOf returns the last line of the outer-most function
+// on the given line matching the selector expression in fn.
+// It is not possible to differentiate between calls to the same
+// function on the same line due to the absence of a column field
+// in runtime.Func.
+func lastLineOf(fn string, line int, fset *token.FileSet, f *ast.File) int {
+	end, ok := cache[funcLine{name: fn, line: line}]
+	if ok {
+		return end
+	}
+	ast.Inspect(f, func(n ast.Node) bool {
+		if exp, ok := n.(*ast.CallExpr); ok {
+			pos := fset.Position(exp.Pos())
+			if ident, ok := exp.Fun.(*ast.SelectorExpr); ok {
+				if pos.Line == line && fmt.Sprintf("%s.%s", ident.X, ident.Sel.Name) == fn {
+					end = fset.Position(exp.End()).Line
+					cache[funcLine{name: fn, line: line}] = end
+					return false
+				}
+			}
+		}
+		return true
+	})
+	return end
+}
+
+var cache = make(map[funcLine]int)
+
+type funcLine struct {
+	name string
+	line int
 }

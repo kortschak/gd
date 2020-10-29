@@ -3,6 +3,7 @@ package enc
 import (
 	"encoding/json"
 	"os"
+	"path"
 	"runtime"
 	"sync"
 )
@@ -23,6 +24,8 @@ func Encode(e Event) error {
 	_, file, line, _ := runtime.Caller(2)
 	e.File = file
 	e.Line = line
+	pc, _, _, _ := runtime.Caller(1)
+	e.Func = path.Base(runtime.FuncForPC(pc).Name())
 	return enc.Encode(e)
 }
 
@@ -30,6 +33,7 @@ type Event struct {
 	Stream string `json:"stream"`
 	File   string `json:"file"`
 	Line   int    `json:"line"`
+	Func   string `json:"func,omitempty"`
 	Text   string `json:"text"`
 	Image  string `json:"image,omitempty"`
 	Title  string `json:"title,omitempty"`
