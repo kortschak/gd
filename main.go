@@ -331,17 +331,21 @@ func lastLineOf(fn string, line int, fset *token.FileSet, f *ast.File) int {
 		return end
 	}
 	ast.Inspect(f, func(n ast.Node) bool {
-		if exp, ok := n.(*ast.CallExpr); ok {
-			pos := fset.Position(exp.Pos())
-			if ident, ok := exp.Fun.(*ast.SelectorExpr); ok {
-				if pos.Line == line && fmt.Sprintf("%s.%s", ident.X, ident.Sel.Name) == fn {
-					end = fset.Position(exp.End()).Line
-					cache[funcLine{name: fn, line: line}] = end
-					return false
-				}
-			}
+		exp, ok := n.(*ast.CallExpr)
+		if !ok {
+			return true
 		}
-		return true
+		ident, ok := exp.Fun.(*ast.SelectorExpr)
+		if !ok {
+			return true
+		}
+		pos := fset.Position(exp.Pos())
+		if pos.Line != line || fmt.Sprintf("%s.%s", ident.X, ident.Sel.Name) != fn {
+			return true
+		}
+		end = fset.Position(exp.End()).Line
+		cache[funcLine{name: fn, line: line}] = end
+		return false
 	})
 	return end
 }
