@@ -109,7 +109,7 @@ func main() {
 			fmt.Println(ticks)
 			for i, e := range r {
 				if e.File != flag.Arg(0) {
-					log.Fatalf("called event generator in dependency file: %s", e.File)
+					log.Fatalf("called event generator in dependency file: %s:%d", e.File, e.Line)
 				}
 				switch e.Stream {
 				case "stdout", "stderr":
