@@ -61,6 +61,8 @@ func main() {
 				switch imp.Path.Value {
 				case `"fmt"`:
 					imp.Path.Value = `"github.com/kortschak/gd/fmt"`
+				case `"log"`:
+					imp.Path.Value = `"github.com/kortschak/gd/log"`
 				case `"show"`:
 					imp.Path.Value = `"github.com/kortschak/gd/show"`
 

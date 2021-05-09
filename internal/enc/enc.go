@@ -1,3 +1,8 @@
+// Copyright ©2020 Dan Kortschak. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package enc provides an JSON event stream protocol.
 package enc
 
 import (
@@ -18,13 +23,13 @@ func init() {
 	enc.SetEscapeHTML(false)
 }
 
-func Encode(e Event) error {
+func Encode(e Event, depth int) error {
 	mu.Lock()
 	defer mu.Unlock()
-	_, file, line, _ := runtime.Caller(2)
+	_, file, line, _ := runtime.Caller(depth + 1)
 	e.File = file
 	e.Line = line
-	pc, _, _, _ := runtime.Caller(1)
+	pc, _, _, _ := runtime.Caller(depth)
 	e.Func = path.Base(runtime.FuncForPC(pc).Name())
 	return enc.Encode(e)
 }

@@ -38,6 +38,7 @@ var locations = []string{
 	"https://blog.golang.org/gopher/glenda.png",
 	"https://blog.golang.org/gopher/gopher.png",
 	"https://blog.golang.org/gopher/header.jpg",
+	"https://blog.golang.org/gopher/404.jpg",
 }
 
 func main() {
@@ -51,7 +52,21 @@ Each iteration of the loop will be rendered into the Markdown.
 		}
 		img, format, err := image.Decode(resp.Body)
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
+```
+> ```stderr
+> 2020/11/01 17:24:37 image: unknown format
+> ```
+> ```stderr
+> panic: image: unknown format
+> 
+> goroutine 1 [running]:
+> log.Panic(0xc000149f48, 0x1, 0x1)
+> 	/usr/local/go/src/log/log.go:221 +0x10b
+> main.main()
+> 	example.go:55 +0x1bb
+> ```
+```
 		}
 		err = resp.Body.Close()
 		if err != nil {
@@ -71,11 +86,11 @@ Each iteration of the loop will be rendered into the Markdown.
 ```
 		show.PNG(img, url, path.Base(url))
 ```
-> ![https://blog.golang.org/gopher/glenda.png](example_61_0.png "glenda.png")
+> ![https://blog.golang.org/gopher/glenda.png](example_62_0.png "glenda.png")
 
-> ![https://blog.golang.org/gopher/gopher.png](example_61_1.png "gopher.png")
+> ![https://blog.golang.org/gopher/gopher.png](example_62_1.png "gopher.png")
 
-> ![https://blog.golang.org/gopher/header.jpg](example_61_2.png "header.jpg")
+> ![https://blog.golang.org/gopher/header.jpg](example_62_2.png "header.jpg")
 ```
 	}
 }

@@ -38,6 +38,7 @@ var locations = []string{
 	"https://blog.golang.org/gopher/glenda.png",
 	"https://blog.golang.org/gopher/gopher.png",
 	"https://blog.golang.org/gopher/header.jpg",
+	"https://blog.golang.org/gopher/404.jpg",
 }
 
 func main() {
@@ -51,7 +52,7 @@ func main() {
 		}
 		img, format, err := image.Decode(resp.Body)
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 		err = resp.Body.Close()
 		if err != nil {
