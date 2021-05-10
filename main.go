@@ -205,6 +205,10 @@ func main() {
 						if err != nil {
 							log.Fatal(err)
 						}
+						err = dst.Close()
+						if err != nil {
+							log.Fatal(err)
+						}
 						if *quote {
 							_, err = fmt.Fprint(out, "> ")
 							if err != nil {
