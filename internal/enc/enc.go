@@ -6,22 +6,9 @@
 package enc
 
 import (
-	"encoding/json"
-	"os"
 	"path"
 	"runtime"
-	"sync"
 )
-
-var (
-	mu  sync.Mutex
-	enc *json.Encoder
-)
-
-func init() {
-	enc = json.NewEncoder(os.Stdout)
-	enc.SetEscapeHTML(false)
-}
 
 func Encode(e Event, depth int) error {
 	mu.Lock()
@@ -31,7 +18,7 @@ func Encode(e Event, depth int) error {
 	e.Line = line
 	pc, _, _, _ := runtime.Caller(depth)
 	e.Func = path.Base(runtime.FuncForPC(pc).Name())
-	return enc.Encode(e)
+	return render(e)
 }
 
 type Event struct {

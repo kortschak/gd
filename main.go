@@ -348,7 +348,7 @@ func run(fset *token.FileSet, f *ast.File, args []string) (map[int][]enc.Event, 
 		return nil, err
 	}
 
-	args = append([]string{"run", tmp.Name()}, args...)
+	args = append([]string{"run", "-tags", "gd", tmp.Name()}, args...)
 	gorun := exec.Command("go", args...)
 	var buf bytes.Buffer
 	gorun.Stdout = &buf
