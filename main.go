@@ -188,7 +188,7 @@ func main() {
 							log.Fatalf("unknown image format: %s", e.Image)
 						}
 						var name string
-						base := filepath.Base(flag.Arg(0))
+						base := filepath.Base(e.File)
 						ext := filepath.Ext(base)
 						base = base[:len(base)-len(ext)]
 						if len(r) == 1 {
